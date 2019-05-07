@@ -6,3 +6,9 @@ LIC_FILES_CHKSUM = "file://package.xml;beginline=13;endline=13;md5=d566ef916e9de
 DEPENDS = "console-bridge"
 
 require roscpp-core.inc
+
+S = "${WORKDIR}/git/${ROS_SPN}"
+RDEPENDS_${PN} = "console-bridge"
+
+
+inherit catkin

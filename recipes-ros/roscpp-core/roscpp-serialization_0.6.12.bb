@@ -6,3 +6,7 @@ LIC_FILES_CHKSUM = "file://package.xml;beginline=11;endline=11;md5=d566ef916e9de
 DEPENDS = "cpp-common roscpp-traits rostime"
 
 require roscpp-core.inc
+
+S = "${WORKDIR}/git/${ROS_SPN}"
+
+inherit catkin

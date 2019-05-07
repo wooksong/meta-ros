@@ -7,4 +7,6 @@ DEPENDS = "boost cpp-common"
 
 require roscpp-core.inc
 
-SRC_URI += "file://0001-argument-to-boost-microseconds-must-be-integral.patch;striplevel=2"
+S = "${WORKDIR}/git/${ROS_SPN}"
+
+inherit catkin
