@@ -1,7 +1,7 @@
-From e6179255b99264a51f8733f52d92ca579fbacb61 Mon Sep 17 00:00:00 2001
+From 6c113b8070ca9da71eeb81592574cf52ab4b7e24 Mon Sep 17 00:00:00 2001
 From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Date: Sun, 15 Apr 2018 02:11:42 +0200
-Subject: [PATCH] allow proper cross-compilation with catkin
+Subject: [PATCH 1/1] allow proper cross-compilation with catkin
 
 The original patch is:
 
@@ -26,22 +26,22 @@ Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
  create mode 100644 cmake/catkin_strip_root_path.cmake
 
 diff --git a/cmake/all.cmake b/cmake/all.cmake
-index 6910906..e421b76 100644
+index d6c3e71..db012b9 100644
 --- a/cmake/all.cmake
 +++ b/cmake/all.cmake
-@@ -118,6 +118,7 @@ foreach(filename
-     catkin_metapackage
-     catkin_package
+@@ -134,6 +134,7 @@ foreach(filename
      catkin_package_xml
+     custom_install # required by catkin_symlink_install and test/gtest
+     catkin_symlink_install
 +    catkin_strip_root_path
      catkin_workspace
      debug_message
      em_expand
 diff --git a/cmake/catkin_package.cmake b/cmake/catkin_package.cmake
-index 8ef6c48..d6bc68f 100644
+index fb6b01a..0f8df0b 100644
 --- a/cmake/catkin_package.cmake
 +++ b/cmake/catkin_package.cmake
-@@ -432,6 +432,14 @@ function(_catkin_package)
+@@ -438,6 +438,14 @@ function(_catkin_package)
    # package cmake dir is the folder where the generated pkgConfig.cmake is located
    set(PKG_CMAKE_DIR "\${${PROJECT_NAME}_DIR}")
  
@@ -95,7 +95,7 @@ index 0000000..ca5c453
 +  set(${var} ${output} PARENT_SCOPE)
 +endfunction()
 diff --git a/cmake/templates/pkgConfig.cmake.in b/cmake/templates/pkgConfig.cmake.in
-index d99b811..3af5c71 100644
+index 9c0e46d..c13f947 100644
 --- a/cmake/templates/pkgConfig.cmake.in
 +++ b/cmake/templates/pkgConfig.cmake.in
 @@ -78,6 +78,15 @@ else()
@@ -114,9 +114,9 @@ index d99b811..3af5c71 100644
  # warn when using a deprecated package
  if(NOT "@PROJECT_DEPRECATED@" STREQUAL "")
    set(_msg "WARNING: package '@PROJECT_NAME@' is deprecated")
-@@ -95,7 +104,19 @@ if(NOT "@PROJECT_CMAKE_CONFIG_INCLUDE_DIRS@ " STREQUAL " ")
-   set(@PROJECT_NAME@_INCLUDE_DIRS "")
-   set(_include_dirs "@PROJECT_CMAKE_CONFIG_INCLUDE_DIRS@")
+@@ -102,7 +111,19 @@ if(NOT "@PROJECT_CMAKE_CONFIG_INCLUDE_DIRS@ " STREQUAL " ")
+     set(_report "Report the problem to the maintainer '@PROJECT_MAINTAINER@' and request to fix the problem.")
+   endif()
    foreach(idir ${_include_dirs})
 -    if(IS_ABSOLUTE ${idir} AND IS_DIRECTORY ${idir})
 +    if(IS_ABSOLUTE ${idir} AND CMAKE_CROSSCOMPILING)
@@ -135,7 +135,7 @@ index d99b811..3af5c71 100644
        set(include ${idir})
      elseif("${idir} " STREQUAL "@CATKIN_GLOBAL_INCLUDE_DESTINATION@ ")
        get_filename_component(include "${@PROJECT_NAME@_DIR}/../../../@CATKIN_GLOBAL_INCLUDE_DESTINATION@" ABSOLUTE)
-@@ -116,18 +137,31 @@ foreach(library ${libraries})
+@@ -125,18 +146,31 @@ foreach(library ${libraries})
      list(APPEND @PROJECT_NAME@_LIBRARIES ${library})
    elseif(TARGET ${library})
      list(APPEND @PROJECT_NAME@_LIBRARIES ${library})
