@@ -8,4 +8,5 @@ DEPENDS = "roscpp"
 
 require ros-comm.inc
 
+inherit catkin
 ROS_PKG_SUBDIR = "tools"

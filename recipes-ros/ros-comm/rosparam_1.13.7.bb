@@ -6,4 +6,5 @@ LIC_FILES_CHKSUM = "file://package.xml;beginline=15;endline=15;md5=d566ef916e9de
 
 require ros-comm.inc
 
+inherit catkin
 ROS_PKG_SUBDIR = "tools"

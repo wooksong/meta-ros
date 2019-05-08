@@ -8,7 +8,8 @@ PR = "r1"
 
 require ros-comm.inc
 
-SRC_URI += "file://0001-increase-rosmaster-timeout.patch;patchdir=../.. \
+inherit catkin
+SRC_URI += "file://0001-increase-rosmaster-timeout.patch \
     file://roscore.service \
     file://roscore-default \
 "
@@ -16,14 +17,13 @@ SRC_URI += "file://0001-increase-rosmaster-timeout.patch;patchdir=../.. \
 ROS_PKG_SUBDIR = "tools"
 
 RDEPENDS_${PN} = "\
-    ${@'python-textutils' if d.getVar('PYTHON_PN', True) == 'python' else ''} \
-    ${PYTHON_PN}-logging \
-    ${PYTHON_PN}-threading \
-    ${PYTHON_PN}-rospkg \
-    ${PYTHON_PN}-pyyaml \
-    ${PYTHON_PN}-defusedxml \
-    ${PYTHON_PN}-paramiko \ 
+    python-textutils \
+    python-logging \
+    python-threading \
+    python-rospkg \
     rosgraph \
+    python-pyyaml \
+    python-defusedxml \
     roslib \
     rosclean \
     rosmaster \
@@ -41,9 +41,13 @@ do_install_append() {
     # Install systemd unit file
     install -d ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/roscore.service ${D}${systemd_unitdir}/system/roscore.service
+
+    install -d ${D}${systemd_unitdir}/system/multi-user.target.wants
+    ln -fs ../roscore.service ${D}${systemd_unitdir}/system/multi-user.target.wants/roscore.service
 }
 
 FILES_${PN}-systemd += "${sysconfdir}/default/roscore \
+    ${systemd_unitdir}/system/multi-user.target.wants/roscore.service \
 "
 
 CONFFILES_${PN}-systemd += "${sysconfdir}/default/roscore \

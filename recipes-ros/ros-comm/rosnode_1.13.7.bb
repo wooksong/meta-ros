@@ -8,4 +8,5 @@ RDEPENDS_${PN} = "python-io python-xmlrpc rosgraph rostopic"
 
 require ros-comm.inc
 
+inherit catkin
 ROS_PKG_SUBDIR = "tools"

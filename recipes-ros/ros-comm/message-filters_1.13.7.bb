@@ -6,7 +6,10 @@ LIC_FILES_CHKSUM = "file://package.xml;beginline=8;endline=8;md5=d566ef916e9dedc
 DEPENDS = "boost rosconsole roscpp xmlrpcpp"
 
 require ros-comm.inc
+SRC_URI += "file://0001-Remove-signals-from-find_package-Boost-COMPONENTS-.-.patch"
 
+inherit catkin
 ROS_PKG_SUBDIR = "utilities"
 
-SRC_URI += "file://0001-Changed-invocation-to-add-to-conform-template-syntax.patch;patchdir=../.."
+# Exclude libmessage_filters.so from shlibs to support coexistence of ROS1 and ROS2
+PRIVATE_LIBS = "libmessage_filters.so"

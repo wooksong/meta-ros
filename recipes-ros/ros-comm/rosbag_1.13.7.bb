@@ -5,11 +5,12 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://package.xml;beginline=10;endline=10;md5=d566ef916e9dedc494f5f793a6690ba5"
 
 DEPENDS = "boost cpp-common python-imaging rosbag-storage rosconsole roscpp roscpp-serialization \
-    topic-tools xmlrpcpp"
+    topic-tools xmlrpcpp std-srvs"
 
 require ros-comm.inc
 
+inherit catkin
 ROS_PKG_SUBDIR = "tools"
 
 RDEPENDS_${PN} = "python-compression python-threading python-pyyaml python-io \
-    genmsg genpy roslib rospy"
+    genmsg genpy roslib rospy libtinyxml2"
